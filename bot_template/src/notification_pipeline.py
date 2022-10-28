@@ -15,6 +15,3 @@ class NotificationPipeline:
         self.telegram.start()
 
 
-if __name__ == '__main__':
-    # print(get_random_poetry_rf())
-    pass

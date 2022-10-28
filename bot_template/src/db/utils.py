@@ -22,13 +22,11 @@ Session = sessionmaker(bind=engine)
 def fetch_df_by_query(conn, query):
     res = conn.execute(text(query))
     data = res.fetchall()
-    df = pd.DataFrame(data, columns=res.keys())
-    return df
+    return pd.DataFrame(data, columns=res.keys())
 
 
 def get_connection():
-    conn = engine.connect()
-    return conn
+    return engine.connect()
 
 
 def get_session():

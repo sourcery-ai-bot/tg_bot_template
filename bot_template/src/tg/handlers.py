@@ -28,11 +28,13 @@ def mention_handler(bot, update, conn):
         # reply_markup=reply_markup
     )
     # Сохраняем сообщение в базу
-    backend.add_post(conn, tg_message_id=response.message_id,
-                     post_text=message,
-                     user_id='@' + update.effective_user.username,
-                     chat_id=update.effective_chat.id,
-                     )
+    backend.add_post(
+        conn,
+        tg_message_id=response.message_id,
+        post_text=message,
+        user_id=f'@{update.effective_user.username}',
+        chat_id=update.effective_chat.id,
+    )
 
 
 @prepare_connection
@@ -40,7 +42,7 @@ def button_add_score(bot, update, conn):
     logger.debug('')
     query = update.callback_query
     action_user_name = update.effective_user.name
-    t = "Selected option: {} by user {}".format(query.data, action_user_name)
+    t = f"Selected option: {query.data} by user {action_user_name}"
     logger.debug(t)
     query.answer()
     post_id = backend.find_post_by_tg_message(conn, update.effective_message['message_id'])['id']
@@ -50,7 +52,7 @@ def button_add_score(bot, update, conn):
     agg_post_scores = backend.get_post_scores_values(conn, post_id)
     reply_markup = query.message.reply_markup
     for b in reply_markup.inline_keyboard[0]:
-        b.text = '{}{}'.format(agg_post_scores.get(int(b.callback_data), 0), b.text[-1])
+        b.text = f'{agg_post_scores.get(int(b.callback_data), 0)}{b.text[-1]}'
     query.edit_message_reply_markup(reply_markup)
 
 

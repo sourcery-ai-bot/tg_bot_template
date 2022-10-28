@@ -13,8 +13,7 @@ def find_post_by_tg_message(session, tg_message_id):
 def list_posts(session):
     logger.debug('')
     query = session.query(Posts)
-    post = pd.read_sql(query.statement, session.bind).to_dict(orient='records')
-    return post
+    return pd.read_sql(query.statement, session.bind).to_dict(orient='records')
 
 
 def get_or_create_user(session, username):

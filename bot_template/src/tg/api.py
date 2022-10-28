@@ -7,11 +7,9 @@ import json
 
 class MessageFilter(BaseFilter):
     def filter(self, message):
-        triggers = set(['ещё!', ])
-        message_tokens = set([c.lower() for c in (message.text or '').split(' ')])
-        if len(triggers & message_tokens):
-            return True
-        return False
+        triggers = {'ещё!'}
+        message_tokens = {c.lower() for c in (message.text or '').split(' ')}
+        return bool(len(triggers & message_tokens))
 
 
 class TelegramInterface:
@@ -20,12 +18,11 @@ class TelegramInterface:
 
     """
     def __init__(self, config):
-        logger.debug(f'Init telegram interface')
+        logger.debug('Init telegram interface')
         self.config = config
         bot_token = self.config.get('telegram_token', None)
-        proxy_url = 'http://{}:{}@{}'.format(config.get('proxy_login'),
-                                             config.get('proxy_pass'),
-                                             config.get('proxy'))
+        proxy_url = f"http://{config.get('proxy_login')}:{config.get('proxy_pass')}@{config.get('proxy')}"
+
         self.updater = Updater(bot_token, request_kwargs={'proxy_url': proxy_url})
 
         logger.info('Add handlers...')
